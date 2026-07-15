@@ -34,3 +34,130 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+Final Project Folder Structure
+
+TaskHive
+│
+├── frontend
+│
+│   ├── src
+│   │
+│   ├── app
+│   │   ├── login
+│   │   ├── register
+│   │   ├── dashboard
+│   │   │
+│   │   ├── admin
+│   │   ├── manager
+│   │   └── member
+│   │
+│   ├── components
+│   │
+│   │   ├── Navbar.tsx
+│   │   ├── Sidebar.tsx
+│   │   ├── Table.tsx
+│   │   ├── Modal.tsx
+│   │   └── Charts.tsx
+│   │
+│   ├── services
+│   │   └── api.ts
+│   │
+│   ├── hooks
+│   │
+│   ├── utils
+│   │
+│   └── middleware.ts
+│
+│
+├── backend
+│
+│   ├── prisma
+│   │
+│   ├── src
+│   │
+│   ├── controllers
+│   ├── services
+│   ├── routes
+│   ├── middleware
+│   └── utils
+│
+│
+├── docs
+│
+│   ├── ERD.png
+│   ├── UseCase.png
+│   ├── Architecture.png
+│   └── API.md
+│
+│
+├── README.md
+└── .github
+    └── workflows
+        └── ci.yml
+
+# TaskHive
+
+Project and Team Task Management Platform
+
+
+## Features
+
+### Authentication
+
+- JWT Authentication
+- Password hashing
+- Role based access control
+
+
+### Administrator
+
+- User management
+- Role management
+- Dashboard statistics
+
+
+### Project Manager
+
+- Create projects
+- Assign members
+- Manage tasks
+
+
+### Team Member
+
+- View projects
+- Update tasks
+- Add comments
+
+
+
+## Tech Stack
+
+
+Frontend:
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+
+
+Backend:
+
+- Node.js
+- Express.js
+- Prisma
+
+
+Database:
+
+- PostgreSQL
+- Supabase
+
+
+
+## Installation
+
+
+Clone repository
+
