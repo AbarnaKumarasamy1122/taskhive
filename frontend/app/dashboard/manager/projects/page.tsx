@@ -1,6 +1,15 @@
+"use client";
+
+import { useState } from "react";
+import ProjectForm from "@/components/manager/ProjectForm";
+
+import MemberSelector from "@/components/manager/MemberSelector";
+
+import { assignMembers } from "@/services/project.service";
 import ProjectTable from "@/components/projects/ProjectTable";
 
 export default function ProjectsPage() {
+  const [members, setMembers] = useState<string[]>([]);
   return (
     <div>
       <div
@@ -33,6 +42,8 @@ rounded
       </div>
 
       <ProjectTable />
+      <ProjectForm />
+      <MemberSelector selected={members} setSelected={setMembers} />
     </div>
   );
 }

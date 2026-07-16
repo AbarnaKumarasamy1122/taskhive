@@ -1,50 +1,28 @@
-interface Props {
-  project: any;
-}
-
-export default function ProjectCard({ project }: Props) {
+export default function ProjectCard({ project }: any) {
   return (
     <div
       className="
+border
+rounded
+p-5
 bg-white
-rounded-xl
-shadow
-p-6
 "
     >
       <h2
         className="
-text-xl
 font-bold
+text-xl
 "
       >
         {project.title}
       </h2>
 
-      <p
-        className="
-text-gray-600
-mt-3
-"
-      >
-        {project.description}
-      </p>
+      <p>{project.description}</p>
 
-      <div
-        className="
-mt-4
-"
-      >
+      <p className="mt-3">
         Status:
-        <span
-          className="
-font-semibold
-ml-2
-"
-        >
-          {project.status}
-        </span>
-      </div>
+        <b>{project.status}</b>
+      </p>
     </div>
   );
 }

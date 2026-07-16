@@ -1,113 +1,72 @@
-import Link from "next/link";
+"use client";
+
+import RoleGuard from "@/components/auth/RoleGuard";
+
+import { useProjects } from "@/hooks/useProjects";
 
 export default function ManagerDashboard() {
+  const { data, isLoading } = useProjects();
+
+  const projects = Array.isArray(data) ? data : [];
+
+  if (isLoading) {
+    return (
+      <RoleGuard role="PROJECT_MANAGER">
+        <div>Loading...</div>
+      </RoleGuard>
+    );
+  }
+
   return (
-    <div>
-      <h1
-        className="
-text-3xl
-font-bold
-mb-6
-"
-      >
-        Project Manager Dashboard
-      </h1>
+    <RoleGuard role="PROJECT_MANAGER">
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold">Project Manager Dashboard</h1>
 
-      <div
-        className="
+        <div
+          className="
 grid
-grid-cols-3
-gap-6
+grid-cols-1
+md:grid-cols-3
+gap-5
+"
+        >
+          <Card title="Projects" value={projects.length} />
+
+          <Card
+            title="Active Projects"
+            value={projects.filter((p) => p.status === "ACTIVE").length}
+          />
+
+          <Card
+            title="Completed Projects"
+            value={projects.filter((p) => p.status === "COMPLETED").length}
+          />
+        </div>
+      </div>
+    </RoleGuard>
+  );
+}
+
+function Card({ title, value }: { title: string; value: number }) {
+  return (
+    <div
+      className="
+bg-white
+p-6
+rounded
+shadow
+"
+    >
+      <h2>{title}</h2>
+
+      <p
+        className="
+text-3xl
+font-bold
 "
       >
-        <div
-          className="
-bg-white
-p-6
-rounded
-shadow
-"
-        >
-          <h2>Projects</h2>
-
-          <p
-            className="
-text-3xl
-font-bold
-"
-          >
-            10
-          </p>
-        </div>
-
-        <div
-          className="
-bg-white
-p-6
-rounded
-shadow
-"
-        >
-          <h2>Members</h2>
-
-          <p
-            className="
-text-3xl
-font-bold
-"
-          >
-            25
-          </p>
-        </div>
-
-        <div
-          className="
-bg-white
-p-6
-rounded
-shadow
-"
-        >
-          <h2>Pending Tasks</h2>
-
-          <p
-            className="
-text-3xl
-font-bold
-"
-          >
-            15
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-8 space-x-4">
-        <Link
-          href="/dashboard/manager/projects"
-          className="
-bg-blue-600
-text-white
-px-5
-py-3
-rounded
-"
-        >
-          Manage Projects
-        </Link>
-
-        <Link
-          href="/dashboard/manager/tasks"
-          className="
-bg-green-600
-text-white
-px-5
-py-3
-rounded
-"
-        >
-          Manage Tasks
-        </Link>
-      </div>
+        {value}
+      </p>
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { useRouter } from "next/navigation";
-
+import toast from "react-hot-toast";
 import useAuth from "@/hooks/useAuth";
 
 export default function RegisterPage() {
@@ -22,9 +22,15 @@ export default function RegisterPage() {
   });
 
   const handleSubmit = async () => {
-    await register(form);
+    try {
+      await register(form);
 
-    router.push("/login");
+      toast.success("Registration successful");
+
+      router.push("/login");
+    } catch (error) {
+      toast.error("Registration failed");
+    }
   };
 
   return (

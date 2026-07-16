@@ -1,70 +1,29 @@
-import {
-    Request,
-    Response,
-    NextFunction
-}
-from "express";
+import { Request, Response, NextFunction } from "express";
 
+export const authorize = (allowedRoles: string[]) => {
+  return (
+    req: Request,
 
+    res: Response,
 
-export const authorize = (
-    allowedRoles:string[]
-)=>{
+    next: NextFunction,
+  ) => {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
 
+        message: "User not authenticated",
+      });
+    }
 
-    return (
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
 
-        req:Request,
+        message: "Access denied",
+      });
+    }
 
-        res:Response,
-
-        next:NextFunction
-
-    )=>{
-
-
-        if(!req.user){
-
-
-            return res.status(401).json({
-
-                success:false,
-
-                message:
-                "User not authenticated"
-
-            });
-
-
-        }
-
-
-
-        if(
-            !allowedRoles.includes(
-                req.user.role
-            )
-        ){
-
-
-            return res.status(403).json({
-
-                success:false,
-
-                message:
-                "Access denied"
-
-            });
-
-
-        }
-
-
-
-        next();
-
-
-    };
-
-
+    next();
+  };
 };

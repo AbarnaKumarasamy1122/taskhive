@@ -9,35 +9,36 @@ interface NavbarProps {
 }
 
 export default function Navbar({ setOpen }: NavbarProps) {
-  const {
-    user,
+  const { user, logout } = useAuth();
 
-    logout,
-  } = useAuth();
+  const roleName =
+    typeof user?.role === "string" ? user.role : user?.role?.name;
 
   return (
     <header
       className="
-flex
-h-16
-items-center
-justify-between
-border-b
-bg-white
-px-6
-"
+      flex
+      h-16
+      items-center
+      justify-between
+      border-b
+      bg-white
+      px-6
+      "
     >
+      {/* Left Side */}
+
       <div
         className="
-flex
-items-center
-gap-4
-"
+        flex
+        items-center
+        gap-4
+        "
       >
         <button
           className="
-md:hidden
-"
+          md:hidden
+          "
           onClick={() => setOpen(true)}
         >
           <Menu size={28} />
@@ -45,56 +46,62 @@ md:hidden
 
         <h1
           className="
-text-xl
-font-bold
-"
+          text-xl
+          font-bold
+          "
         >
           TaskHive
         </h1>
       </div>
 
+      {/* Right Side */}
+
       <div
         className="
-flex
-items-center
-gap-4
-"
+        flex
+        items-center
+        gap-4
+        "
       >
         <div
           className="
-text-right
-hidden
-sm:block
-"
+          hidden
+          sm:block
+          text-right
+          "
         >
           <p
             className="
-font-semibold
-"
+            font-semibold
+            "
           >
             {user?.name}
           </p>
 
           <p
             className="
-text-sm
-text-gray-500
-"
+            text-sm
+            text-gray-500
+            "
           >
-            {user?.role}
+            {roleName}
           </p>
         </div>
 
         <button
-          onClick={logout}
+          onClick={() => {
+            logout();
+
+            window.location.href = "/login";
+          }}
           className="
-rounded
-bg-red-500
-px-4
-py-2
-text-white
-hover:bg-red-600
-"
+          rounded
+          bg-red-500
+          px-4
+          py-2
+          text-white
+          hover:bg-red-600
+          "
         >
           Logout
         </button>

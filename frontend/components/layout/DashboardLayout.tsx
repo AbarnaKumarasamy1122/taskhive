@@ -1,16 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { useRouter } from "next/navigation";
 
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+
+import useAuth from "@/hooks/useAuth";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+
+  const { user, loading } = useAuth();
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login");
+    }
+  }, [loading, user, router]);
+
+  if (loading) {
+    return (
+      <div
+        className="
+h-screen
+flex
+items-center
+justify-center
+"
+      >
+        Loading...
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div
@@ -24,10 +57,9 @@ bg-gray-100
 
       <div
         className="
-flex
 flex-1
+flex
 flex-col
-overflow-hidden
 "
       >
         <Navbar setOpen={setSidebarOpen} />

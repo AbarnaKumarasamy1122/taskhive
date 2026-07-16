@@ -1,32 +1,13 @@
-export const saveToken = (token:string)=>{
+const TOKEN_KEY = "taskhive_token";
 
-    localStorage.setItem(
-        "token",
-        token
-    );
-
+export const saveToken = (token: string) => {
+  sessionStorage.setItem(TOKEN_KEY, token);
 };
 
-
-
-export const getToken = ()=>{
-
-    if(typeof window==="undefined")
-        return null;
-
-
-    return localStorage.getItem(
-        "token"
-    );
-
+export const getToken = () => {
+  return sessionStorage.getItem(TOKEN_KEY);
 };
 
-
-
-export const removeToken = ()=>{
-
-    localStorage.removeItem(
-        "token"
-    );
-
+export const removeToken = () => {
+  sessionStorage.removeItem(TOKEN_KEY);
 };

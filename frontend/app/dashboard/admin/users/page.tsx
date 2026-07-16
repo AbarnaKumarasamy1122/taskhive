@@ -1,43 +1,28 @@
-import UserTable from "@/components/users/UserTable";
-import { useUsers } from "@/hooks/useUsers";
+"use client";
+
+import UserForm from "@/components/admin/UserForm";
+
+import UserTable from "@/components/admin/UserTable";
 
 export default function UsersPage() {
-  const { data, isLoading } = useUsers();
-
-  if (isLoading)
-    return (
-      <div>
-        <p>Loading users...</p>
-        <div
-          className="
-flex
-justify-between
-mb-6
+  return (
+    <div
+      className="
+space-y-8
 "
-        >
-          <h1
-            className="
+    >
+      <h1
+        className="
 text-3xl
 font-bold
 "
-          >
-            Manage Users
-          </h1>
+      >
+        Manage Users
+      </h1>
 
-          <button
-            className="
-bg-blue-600
-text-white
-px-5
-py-2
-rounded
-"
-          >
-            + New User
-          </button>
-        </div>
+      <UserForm />
 
-        <UserTable />
-      </div>
-    );
+      <UserTable />
+    </div>
+  );
 }

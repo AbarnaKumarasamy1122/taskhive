@@ -6,24 +6,18 @@ import Table from "@/components/ui/Table";
 
 import Button from "@/components/ui/Button";
 
-import { useUsers } from "@/hooks/useUsers";
+interface UserTableProps {
+  users: any[];
+}
 
-export default function UserTable() {
-  const {
-    data = [],
-
-    isLoading,
-  } = useUsers();
-
+export default function UserTable({ users }: UserTableProps) {
   const [search, setSearch] = useState("");
 
   const [page, setPage] = useState(1);
 
   const limit = 10;
 
-  if (isLoading) return <p>Loading...</p>;
-
-  const filteredUsers = data.filter(
+  const filteredUsers = users.filter(
     (user: any) =>
       user.name.toLowerCase().includes(search.toLowerCase()) ||
       user.email.toLowerCase().includes(search.toLowerCase()),
@@ -31,7 +25,7 @@ export default function UserTable() {
 
   const start = (page - 1) * limit;
 
-  const users = filteredUsers.slice(
+  const paginatedUsers = filteredUsers.slice(
     start,
 
     start + limit,
@@ -46,26 +40,19 @@ rounded
 p-3
 w-full
 "
-        placeholder="
-Search users...
-"
+        placeholder="Search users..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
       <Table headers={["Name", "Email", "Role", "Actions"]}>
-        {users.map((user: any) => (
-          <tr
-            key={user.id}
-            className="
-border-t
-"
-          >
+        {paginatedUsers.map((user: any) => (
+          <tr key={user.id} className="border-t">
             <td className="p-4">{user.name}</td>
 
             <td className="p-4">{user.email}</td>
 
-            <td className="p-4">{user.role.name}</td>
+            <td className="p-4">{user.role?.name || user.role}</td>
 
             <td
               className="

@@ -5,11 +5,7 @@ import { useMyProjects } from "@/hooks/useMember";
 import ProjectCard from "@/components/member/ProjectCard";
 
 export default function ProjectsPage() {
-  const {
-    data = [],
-
-    isLoading,
-  } = useMyProjects();
+  const { data, isLoading } = useMyProjects();
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -17,23 +13,23 @@ export default function ProjectsPage() {
     <div>
       <h1
         className="
-text-3xl
+text-2xl
 font-bold
-mb-6
+mb-5
 "
       >
-        My Projects
+        Assigned Projects
       </h1>
 
       <div
         className="
 grid
-grid-cols-3
-gap-6
+md:grid-cols-3
+gap-5
 "
       >
-        {data.map((project: any) => (
-          <ProjectCard key={project.id} project={project} />
+        {data?.map((p: any) => (
+          <ProjectCard key={p.id} project={p} />
         ))}
       </div>
     </div>

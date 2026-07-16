@@ -13,24 +13,25 @@ export default function CommentSection({ taskId }: { taskId: string }) {
     <div className="mt-5">
       <textarea
         className="
-border
-rounded
-p-3
-w-full
-"
+        border
+        rounded
+        p-3
+        w-full
+        "
         placeholder="Add comment"
+        value={comment}
         onChange={(e) => setComment(e.target.value)}
       />
 
       <button
         className="
-bg-blue-600
-text-white
-px-4
-py-2
-rounded
-mt-2
-"
+        bg-blue-600
+        text-white
+        px-4
+        py-2
+        rounded
+        mt-2
+        "
         onClick={() => {
           addComment.mutate({
             taskId,

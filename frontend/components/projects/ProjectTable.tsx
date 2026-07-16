@@ -5,13 +5,11 @@ import Button from "@/components/ui/Button";
 import { useProjects, useProjectMutations } from "@/hooks/useProjects";
 
 export default function ProjectTable() {
-  const {
-    data = [],
-
-    isLoading,
-  } = useProjects();
+  const { data, isLoading } = useProjects();
 
   const { remove } = useProjectMutations();
+
+  const projects = Array.isArray(data) ? data : [];
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -34,13 +32,17 @@ shadow
       </thead>
 
       <tbody>
-        {data.map((project: any) => (
+        {projects.map((project) => (
           <tr key={project.id} className="border-b">
             <td className="p-4">{project.title}</td>
 
             <td>{project.status}</td>
 
-            <td>
+            <td
+              className="
+space-x-2
+"
+            >
               <Button>Edit</Button>
 
               <Button

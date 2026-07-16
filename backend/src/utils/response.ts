@@ -1,62 +1,37 @@
-import {
-    Response
-}
-from "express";
-
-
+import { Response } from "express";
 
 export const successResponse = (
+  res: Response,
 
-    res:Response,
+  message: string,
 
-    message:string,
+  data: any = null,
 
-    data:any=null,
+  statusCode: number = 200,
+) => {
+  return res.status(statusCode).json({
+    success: true,
 
-    statusCode:number=200
+    message,
 
-)=>{
-
-
-    return res.status(statusCode).json({
-
-        success:true,
-
-        message,
-
-        data
-
-    });
-
-
+    data,
+  });
 };
 
-
-
-
-
 export const errorResponse = (
+  res: Response,
 
-    res:Response,
+  message: string,
 
-    message:string,
+  statusCode: number = 400,
 
-    statusCode:number=400,
+  errors: any = null,
+) => {
+  return res.status(statusCode).json({
+    success: false,
 
-    errors:any=null
+    message,
 
-)=>{
-
-
-    return res.status(statusCode).json({
-
-        success:false,
-
-        message,
-
-        errors
-
-    });
-
-
+    errors,
+  });
 };

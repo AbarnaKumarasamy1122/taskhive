@@ -161,3 +161,72 @@ Database:
 
 Clone repository
 
+## Deployment
+
+Frontend:
+
+https://taskhive.vercel.app
+
+
+Backend:
+
+https://taskhive-api.com
+
+
+Database:
+
+Supabase PostgreSQL
+
+
+Environment Variables:
+
+NEXT_PUBLIC_API_URL
+
+# TaskHive Feature Report
+
+
+## Authentication
+
+✔ Register
+✔ Login
+✔ JWT Authentication
+✔ Protected Routes
+
+
+## Administrator
+
+✔ User Management
+✔ Role Management
+✔ Project Management
+✔ Dashboard Statistics
+
+
+## Project Manager
+
+✔ Create Projects
+✔ Update Projects
+✔ Delete Projects
+✔ Assign Members
+✔ Task Management
+
+
+## Team Member
+
+✔ View Projects
+✔ View Tasks
+✔ Update Task Status
+✔ Add Comments
+✔ Notifications
+
+
+## Technical
+
+✔ Next.js
+✔ Express.js
+✔ Prisma
+✔ PostgreSQL
+✔ Supabase
+✔ JWT
+✔ RBAC
+✔ REST API
+✔ CI/CD

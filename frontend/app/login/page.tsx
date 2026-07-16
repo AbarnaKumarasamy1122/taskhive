@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-
 import { useRouter } from "next/navigation";
-
+import toast from "react-hot-toast";
 import useAuth from "@/hooks/useAuth";
 
 export default function LoginPage() {
@@ -17,18 +16,41 @@ export default function LoginPage() {
 
   const [error, setError] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = async () => {
     try {
-      await login(email, password);
+      setLoading(true);
 
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const user = await login(email, password);
 
-      if (user.role === "ADMIN") router.push("/dashboard/admin");
-      else if (user.role === "PROJECT_MANAGER")
-        router.push("/dashboard/manager");
-      else router.push("/dashboard/member");
-    } catch (err: any) {
-      setError("Invalid email or password");
+      const role = typeof user.role === "string" ? user.role : user.role.name;
+
+      toast.success("Login successful");
+
+      switch (role) {
+        case "ADMIN":
+          router.push("/dashboard/admin");
+
+          break;
+
+        case "PROJECT_MANAGER":
+          router.push("/dashboard/manager");
+
+          break;
+
+        case "TEAM_MEMBER":
+          router.push("/dashboard/member");
+
+          break;
+
+        default:
+          router.push("/dashboard");
+      }
+    } catch (error) {
+      toast.error("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,10 +77,17 @@ export default function LoginPage() {
         {error && <p className="text-red-500">{error}</p>}
 
         <button
-          className="bg-black text-white p-2 w-full"
+          disabled={loading}
           onClick={handleLogin}
+          className="
+        bg-black
+        text-white
+        w-full
+        p-2
+        rounded
+        "
         >
-          Login
+          {loading ? "Logging..." : "Login"}
         </button>
       </div>
     </div>

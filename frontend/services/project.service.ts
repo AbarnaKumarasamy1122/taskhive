@@ -1,10 +1,30 @@
 import api from "./api";
 
-export const getProjects = async () => {
+import { Project } from "@/types/project";
+
+// Get Projects
+
+export const getProjects = async (): Promise<Project[]> => {
   const response = await api.get("/projects");
 
-  return response.data.data;
+  console.log("PROJECT API RESPONSE", response.data);
+
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  if (Array.isArray(response.data.data)) {
+    return response.data.data;
+  }
+
+  if (Array.isArray(response.data.projects)) {
+    return response.data.projects;
+  }
+
+  return [];
 };
+
+// Create Project
 
 export const createProject = async (data: any) => {
   const response = await api.post("/projects", data);
@@ -12,30 +32,28 @@ export const createProject = async (data: any) => {
   return response.data;
 };
 
-export const updateProject = async (id: string, data: any) => {
-  const response = await api.put(
-    `/projects/${id}`,
+// Update Project
 
-    data,
-  );
+export const updateProject = async (id: string, data: any) => {
+  const response = await api.patch(`/projects/${id}`, data);
 
   return response.data;
 };
 
+// Delete Project
+
 export const deleteProject = async (id: string) => {
-  return api.delete(`/projects/${id}`);
+  const response = await api.delete(`/projects/${id}`);
+
+  return response.data;
 };
 
-export const assignMember = async (
-  projectId: string,
+// Assign Members
 
-  userId: string,
-) => {
-  return api.post(
-    `/projects/${projectId}/members`,
+export const assignMembers = async (projectId: string, members: string[]) => {
+  const response = await api.post(`/projects/${projectId}/members`, {
+    members,
+  });
 
-    {
-      userId,
-    },
-  );
+  return response.data;
 };

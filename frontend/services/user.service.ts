@@ -1,9 +1,17 @@
 import api from "./api";
 
 export const getUsers = async () => {
-  const response = await api.get("/users");
+  const response = await api.get("/users?role=TEAM_MEMBER");
 
-  return response.data.data;
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  if (Array.isArray(response.data.data)) {
+    return response.data.data;
+  }
+
+  return [];
 };
 
 export const createUser = async (data: any) => {
@@ -12,14 +20,10 @@ export const createUser = async (data: any) => {
   return response.data;
 };
 
-export const updateUser = async (id: string, data: any) => {
-  const response = await api.put(
-    `/users/${id}`,
-
-    data,
-  );
-
-  return response.data;
+export const updateUserRole = async (id: string, roleId: string) => {
+  return api.patch(`/users/${id}`, {
+    roleId,
+  });
 };
 
 export const deleteUser = async (id: string) => {
