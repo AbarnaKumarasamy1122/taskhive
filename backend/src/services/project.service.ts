@@ -1,95 +1,170 @@
 import prisma from "../config/prisma";
 
+// Create Project
 
+export const createProject = async (data: any) => {
+  return await prisma.project.create({
+    data: {
+      title: data.title,
 
-export const createProject =
-async(data:any)=>{
+      description: data.description,
 
+      status: data.status,
 
-return await prisma.project.create({
+      startDate: data.startDate ? new Date(data.startDate) : null,
 
-data
+      endDate: data.endDate ? new Date(data.endDate) : null,
 
-});
+      managerId: data.managerId,
+    },
 
+    include: {
+      manager: true,
 
+      members: {
+        include: {
+          user: true,
+        },
+      },
+
+      tasks: true,
+    },
+  });
 };
 
+// Get Projects
 
+export const getProjects = async () => {
+  return await prisma.project.findMany({
+    include: {
+      manager: true,
 
-export const getProjects =
-async()=>{
+      members: {
+        include: {
+          user: true,
+        },
+      },
 
-
-return await prisma.project.findMany({
-
-include:{
-manager:true,
-members:true,
-tasks:true
-}
-
-});
-
-
+      tasks: true,
+    },
+  });
 };
 
+// Get Single Project
 
+export const getProject = async (id: string) => {
+  return await prisma.project.findUnique({
+    where: {
+      id,
+    },
 
-export const getProject =
-async(id:string)=>{
+    include: {
+      manager: true,
 
+      members: {
+        include: {
+          user: true,
+        },
+      },
 
-return await prisma.project.findUnique({
-
-where:{
-id
-},
-
-include:{
-tasks:true
-}
-
-});
-
-
+      tasks: true,
+    },
+  });
 };
 
+// Update Project
 
+// Update Project
 
-export const updateProject =
-async(
-id:string,
-data:any
-)=>{
+export const updateProject = async (id: string, data: any) => {
+  const { members, startDate, endDate, ...projectData } = data;
 
+  // Update project basic details
 
-return prisma.project.update({
+  const project = await prisma.project.update({
+    where: {
+      id,
+    },
 
-where:{
-id
-},
+    data: {
+      ...projectData,
 
-data
+      startDate: startDate ? new Date(startDate) : null,
 
-});
+      endDate: endDate ? new Date(endDate) : null,
+    },
+  });
 
+  // Update members
 
+  if (members) {
+    // remove old members
+
+    await prisma.projectMember.deleteMany({
+      where: {
+        projectId: id,
+      },
+    });
+
+    // add new members
+
+    if (members.length > 0) {
+      await prisma.projectMember.createMany({
+        data: members.map((userId: string) => ({
+          projectId: id,
+          userId,
+        })),
+      });
+    }
+  }
+
+  // return updated project
+
+  return await prisma.project.findUnique({
+    where: {
+      id,
+    },
+
+    include: {
+      manager: true,
+
+      members: {
+        include: {
+          user: true,
+        },
+      },
+
+      tasks: true,
+    },
+  });
 };
 
+// Delete Project
 
+export const deleteProject = async (id: string) => {
+  return await prisma.$transaction(async (tx) => {
+    // delete assigned members
 
-export const deleteProject =
-async(id:string)=>{
+    await tx.projectMember.deleteMany({
+      where: {
+        projectId: id,
+      },
+    });
 
+    // delete tasks
 
-return prisma.project.delete({
+    await tx.task.deleteMany({
+      where: {
+        projectId: id,
+      },
+    });
 
-where:{
-id
-}
+    // delete project
 
-});
-
-
+    return await tx.project.delete({
+      where: {
+        id,
+      },
+    });
+  });
 };

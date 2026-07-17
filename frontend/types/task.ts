@@ -13,19 +13,38 @@ export interface Task {
 
   status: TaskStatus;
 
-  deadline: string | null;
+  deadline?: string | null;
 
   projectId: string;
 
+  assignedTo: string;
+
+  createdBy: string;
+
   assignee: {
     id: string;
+
     name: string;
   };
 
   creator: {
     id: string;
+
     name: string;
   };
 
-  comments: any[];
+  comments: {
+    id: string;
+
+    comment: string;
+
+    user: {
+      id: string;
+      name: string;
+    };
+
+    createdAt: string;
+  }[];
+
+  createdAt: string;
 }

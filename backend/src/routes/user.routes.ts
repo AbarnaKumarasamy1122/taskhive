@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
   getUsers,
+  getTeamMembers,
   createUser,
   updateUser,
   deleteUser,
@@ -12,20 +13,65 @@ import { authenticate } from "../middlewares/auth.middleware";
 
 import { authorize } from "../middlewares/role.middleware";
 
+
 const router = Router();
+
 
 router.use(authenticate);
 
-router.use(authorize(["ADMIN"]));
 
-router.get("/", getUsers);
+// ===============================
+// ADMIN ONLY USER MANAGEMENT
+// ===============================
 
-router.post("/", createUser);
+router.get(
+  "/",
+  authorize(["ADMIN"]),
+  getUsers
+);
 
-router.put("/:id", updateUser);
 
-router.delete("/:id", deleteUser);
+router.post(
+  "/",
+  authorize(["ADMIN"]),
+  createUser
+);
 
-router.patch("/:id/role", assignRole);
+
+router.put(
+  "/:id",
+  authorize(["ADMIN"]),
+  updateUser
+);
+
+
+router.delete(
+  "/:id",
+  authorize(["ADMIN"]),
+  deleteUser
+);
+
+
+router.patch(
+  "/:id/role",
+  authorize(["ADMIN"]),
+  assignRole
+);
+
+
+// ===============================
+// PROJECT MANAGER TEAM MEMBERS
+// ===============================
+
+router.get(
+  "/team-members",
+  authorize([
+    "ADMIN",
+    "PROJECT_MANAGER"
+  ]),
+  getTeamMembers
+);
+
+
 
 export default router;

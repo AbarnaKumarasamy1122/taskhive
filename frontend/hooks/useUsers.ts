@@ -2,11 +2,20 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { getUsers } from "@/services/user.service";
+import { getUsers, getTeamMembers } from "@/services/user.service";
 
 export function useUsers() {
   return useQuery({
-    queryKey: ["users"],
-    queryFn: getUsers,
+    queryKey: ["team-members"],
+
+    queryFn: getTeamMembers,
+  });
+}
+
+export function useTeamMembers() {
+  return useQuery({
+    queryKey: ["team-members"],
+
+    queryFn: getTeamMembers,
   });
 }

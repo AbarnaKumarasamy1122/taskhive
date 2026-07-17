@@ -1,74 +1,37 @@
-import {Router} from "express";
+import { Router } from "express";
 
-import {
-    authenticate
-}
-from "../middlewares/auth.middleware";
+import { authenticate } from "../middlewares/auth.middleware";
 
-
-import {
-    authorize
-}
-from "../middlewares/role.middleware";
-
+import { authorize } from "../middlewares/role.middleware";
 
 const router = Router();
 
-
-
 router.get(
+  "/",
 
-"/",
+  authenticate,
 
-authenticate,
+  authorize(["PROJECT_MANAGER", "TEAM_MEMBER"]),
 
-authorize([
-    "PROJECT_MANAGER",
-    "TEAM_MEMBER"
-]),
-
-(req,res)=>{
-
-
+  (req, res) => {
     res.json({
-
-        message:
-        "Tasks retrieved"
-
+      message: "Tasks retrieved",
     });
-
-
-}
-
+  },
 );
-
-
 
 router.put(
+  "/:id/status",
 
-"/:id/status",
+  authenticate,
 
-authenticate,
+  authorize(["TEAM_MEMBER"]),
 
-authorize([
-    "TEAM_MEMBER"
-]),
-
-(req,res)=>{
-
-
+  (req, res) => {
     res.json({
-
-        message:
-        "Task status updated"
-
+      message: "Task status updated",
     });
-
-
-}
-
+  },
 );
-
-
 
 export default router;

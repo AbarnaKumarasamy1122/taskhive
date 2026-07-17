@@ -7,7 +7,15 @@ export const getUsers = async (req: Request, res: Response) => {
 
   res.json({
     success: true,
+    data: users,
+  });
+};
 
+export const getTeamMembers = async (req: Request, res: Response) => {
+  const users = await userService.getTeamMembers();
+
+  res.json({
+    success: true,
     data: users,
   });
 };
@@ -17,7 +25,6 @@ export const createUser = async (req: Request, res: Response) => {
 
   res.status(201).json({
     success: true,
-
     data: user,
   });
 };
@@ -27,7 +34,6 @@ export const updateUser = async (req: Request, res: Response) => {
 
   res.json({
     success: true,
-
     data: user,
   });
 };
@@ -37,21 +43,15 @@ export const deleteUser = async (req: Request, res: Response) => {
 
   res.json({
     success: true,
-
     message: "User deleted",
   });
 };
 
 export const assignRole = async (req: Request, res: Response) => {
-  const user = await userService.assignRole(
-    req.params.id,
-
-    req.body.role,
-  );
+  const user = await userService.assignRole(req.params.id, req.body.role);
 
   res.json({
     success: true,
-
     data: user,
   });
 };

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import toast from "react-hot-toast";
 
-import { createTask } from "@/services/task.service";
+import { useCreateTask } from "@/hooks/useTasks";
 
 interface Props {
   projectId: string;
@@ -12,7 +12,13 @@ interface Props {
   users: any[];
 }
 
-export default function TaskForm({ projectId, users }: Props) {
+export default function TaskForm({
+  projectId,
+
+  users,
+}: Props) {
+  const { create } = useCreateTask();
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -20,18 +26,37 @@ export default function TaskForm({ projectId, users }: Props) {
     assignedTo: "",
   });
 
-  const submit = async () => {
-    try {
-      await createTask({
+  const submit = () => {
+    if (!form.title || !form.assignedTo) {
+      toast.error("Title and member required");
+
+      return;
+    }
+
+    create.mutate(
+      {
         ...form,
 
         projectId,
-      });
+      },
 
-      toast.success("Task created");
-    } catch {
-      toast.error("Task creation failed");
-    }
+      {
+        onSuccess() {
+          toast.success("Task created");
+
+          setForm({
+            title: "",
+            description: "",
+            priority: "MEDIUM",
+            assignedTo: "",
+          });
+        },
+
+        onError() {
+          toast.error("Task creation failed");
+        },
+      },
+    );
   };
 
   return (
@@ -39,25 +64,33 @@ export default function TaskForm({ projectId, users }: Props) {
       className="
 bg-white
 p-5
-shadow
 rounded
-space-y-3
+shadow
+space-y-4
 "
     >
       <h2
         className="
 font-bold
+text-xl
 "
       >
         Create Task
       </h2>
 
       <input
-        className="border p-2 w-full"
+        className="
+border
+p-2
+w-full
+rounded
+"
         placeholder="Task title"
+        value={form.title}
         onChange={(e) =>
           setForm({
             ...form,
+
             title: e.target.value,
           })
         }
@@ -68,11 +101,14 @@ font-bold
 border
 p-2
 w-full
+rounded
 "
         placeholder="Description"
+        value={form.description}
         onChange={(e) =>
           setForm({
             ...form,
+
             description: e.target.value,
           })
         }
@@ -84,18 +120,20 @@ border
 p-2
 w-full
 "
+        value={form.priority}
         onChange={(e) =>
           setForm({
             ...form,
+
             priority: e.target.value,
           })
         }
       >
-        <option>LOW</option>
+        <option value="LOW">LOW</option>
 
-        <option>MEDIUM</option>
+        <option value="MEDIUM">MEDIUM</option>
 
-        <option>HIGH</option>
+        <option value="HIGH">HIGH</option>
       </select>
 
       <select
@@ -104,14 +142,16 @@ border
 p-2
 w-full
 "
+        value={form.assignedTo}
         onChange={(e) =>
           setForm({
             ...form,
+
             assignedTo: e.target.value,
           })
         }
       >
-        <option>Assign Member</option>
+        <option value="">Select Member</option>
 
         {users.map((user) => (
           <option key={user.id} value={user.id}>
@@ -121,6 +161,7 @@ w-full
       </select>
 
       <button
+        disabled={create.isPending}
         onClick={submit}
         className="
 bg-blue-600
@@ -130,7 +171,7 @@ py-2
 rounded
 "
       >
-        Create Task
+        {create.isPending ? "Creating..." : "Create Task"}
       </button>
     </div>
   );

@@ -1,6 +1,12 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+
+import toast from "react-hot-toast";
 
 import {
   getProjects,
@@ -10,12 +16,9 @@ import {
   assignMembers,
 } from "@/services/project.service";
 
-import toast from "react-hot-toast";
-
 export function useProjects() {
   return useQuery({
     queryKey: ["projects"],
-
     queryFn: getProjects,
   });
 }
@@ -33,11 +36,17 @@ export function useProjectMutations() {
         queryKey: ["projects"],
       });
     },
+
+    onError(error: any) {
+      toast.error(
+        error?.response?.data?.message ??
+          "Failed to create project"
+      );
+    },
   });
 
   const update = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) =>
-      updateProject(id, data),
+    mutationFn: updateProject,
 
     onSuccess() {
       toast.success("Project updated");
@@ -45,6 +54,13 @@ export function useProjectMutations() {
       client.invalidateQueries({
         queryKey: ["projects"],
       });
+    },
+
+    onError(error: any) {
+      toast.error(
+        error?.response?.data?.message ??
+          "Failed to update project"
+      );
     },
   });
 
@@ -58,16 +74,17 @@ export function useProjectMutations() {
         queryKey: ["projects"],
       });
     },
+
+    onError(error: any) {
+      toast.error(
+        error?.response?.data?.message ??
+          "Failed to delete project"
+      );
+    },
   });
 
   const assign = useMutation({
-    mutationFn: ({
-      projectId,
-      members,
-    }: {
-      projectId: string;
-      members: string[];
-    }) => assignMembers(projectId, members),
+    mutationFn: assignMembers,
 
     onSuccess() {
       toast.success("Members assigned");
@@ -76,15 +93,19 @@ export function useProjectMutations() {
         queryKey: ["projects"],
       });
     },
+
+    onError(error: any) {
+      toast.error(
+        error?.response?.data?.message ??
+          "Failed to assign members"
+      );
+    },
   });
 
   return {
     create,
-
     update,
-
     remove,
-
     assign,
   };
 }

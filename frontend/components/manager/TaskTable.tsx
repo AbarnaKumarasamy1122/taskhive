@@ -1,45 +1,128 @@
 "use client";
 
-import { useTasks } from "@/hooks/useTasks";
+import { useTasks, useDeleteTask } from "@/hooks/useTasks";
 
 export default function TaskTable() {
-  const { data, isLoading } = useTasks();
+  const { data, isLoading, error } = useTasks();
 
-  if (isLoading) return <p>Loading...</p>;
+  const { mutate: deleteTask } = useDeleteTask();
+
+  const tasks = Array.isArray(data) ? data : [];
+
+  if (isLoading) {
+    return <p>Loading tasks...</p>;
+  }
+
+  if (error) {
+    return (
+      <p
+        className="
+      text-red-500
+      "
+      >
+        Failed to load tasks
+      </p>
+    );
+  }
+
+  if (tasks.length === 0) {
+    return (
+      <div
+        className="
+      bg-white
+      p-5
+      rounded
+      shadow
+      "
+      >
+        No tasks available
+      </div>
+    );
+  }
 
   return (
-    <table
+    <div
       className="
-w-full
-bg-white
-shadow
-"
+    bg-white
+    rounded
+    shadow
+    overflow-x-auto
+    "
     >
-      <thead>
-        <tr>
-          <th>Title</th>
+      <table
+        className="
+      w-full
+      "
+      >
+        <thead>
+          <tr
+            className="
+          border-b
+          "
+          >
+            <th className="p-4 text-left">Task</th>
 
-          <th>Priority</th>
+            <th>Priority</th>
 
-          <th>Status</th>
+            <th>Status</th>
 
-          <th>Assigned</th>
-        </tr>
-      </thead>
+            <th>Assigned To</th>
 
-      <tbody>
-        {data?.map((task: any) => (
-          <tr key={task.id}>
-            <td>{task.title}</td>
-
-            <td>{task.priority}</td>
-
-            <td>{task.status}</td>
-
-            <td>{task.assignee.name}</td>
+            <th>Action</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {tasks.map((task: any) => (
+            <tr
+              key={task.id}
+              className="
+              border-b
+              "
+            >
+              <td className="p-4">
+                <p
+                  className="
+                font-medium
+                "
+                >
+                  {task.title}
+                </p>
+
+                <p
+                  className="
+                text-sm
+                text-gray-500
+                "
+                >
+                  {task.description}
+                </p>
+              </td>
+
+              <td>{task.priority}</td>
+
+              <td>{task.status}</td>
+
+              <td>{task.assignee?.name ?? "Not Assigned"}</td>
+
+              <td>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="
+                  bg-red-500
+                  text-white
+                  px-3
+                  py-1
+                  rounded
+                  "
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

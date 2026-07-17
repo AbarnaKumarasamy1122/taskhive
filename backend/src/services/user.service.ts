@@ -1,8 +1,23 @@
 import prisma from "../config/prisma";
+
 import { hashPassword } from "../utils/password";
 
 export const getUsers = async () => {
-  return await prisma.user.findMany({
+  return prisma.user.findMany({
+    include: {
+      role: true,
+    },
+  });
+};
+
+export const getTeamMembers = async () => {
+  return prisma.user.findMany({
+    where: {
+      role: {
+        name: "TEAM_MEMBER",
+      },
+    },
+
     include: {
       role: true,
     },
@@ -22,7 +37,7 @@ export const createUser = async (data: any) => {
 
   const hashedPassword = await hashPassword(password);
 
-  return await prisma.user.create({
+  return prisma.user.create({
     data: {
       name,
 
@@ -40,7 +55,7 @@ export const createUser = async (data: any) => {
 };
 
 export const updateUser = async (id: string, data: any) => {
-  return await prisma.user.update({
+  return prisma.user.update({
     where: {
       id,
     },
@@ -50,7 +65,7 @@ export const updateUser = async (id: string, data: any) => {
 };
 
 export const deleteUser = async (id: string) => {
-  return await prisma.user.delete({
+  return prisma.user.delete({
     where: {
       id,
     },
@@ -66,7 +81,7 @@ export const assignRole = async (id: string, roleName: string) => {
 
   if (!role) throw new Error("Role not found");
 
-  return await prisma.user.update({
+  return prisma.user.update({
     where: {
       id,
     },

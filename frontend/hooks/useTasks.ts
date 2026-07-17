@@ -47,10 +47,12 @@ export function useUpdateTaskStatus() {
 
 // Create Task
 
+// Create Task
+
 export function useCreateTask() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  const create = useMutation({
     mutationFn: createTask,
 
     onSuccess() {
@@ -65,6 +67,10 @@ export function useCreateTask() {
       toast.error("Failed to create task");
     },
   });
+
+  return {
+    create,
+  };
 }
 
 // Delete Task

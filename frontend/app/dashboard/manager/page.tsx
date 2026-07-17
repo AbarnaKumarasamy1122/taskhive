@@ -12,15 +12,26 @@ export default function ManagerDashboard() {
   if (isLoading) {
     return (
       <RoleGuard role="PROJECT_MANAGER">
-        <div>Loading...</div>
+        <div>Loading dashboard...</div>
       </RoleGuard>
     );
   }
 
   return (
     <RoleGuard role="PROJECT_MANAGER">
-      <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Project Manager Dashboard</h1>
+      <div
+        className="
+space-y-6
+"
+      >
+        <h1
+          className="
+text-3xl
+font-bold
+"
+        >
+          Project Manager Dashboard
+        </h1>
 
         <div
           className="
@@ -30,16 +41,16 @@ md:grid-cols-3
 gap-5
 "
         >
-          <Card title="Projects" value={projects.length} />
+          <Card title="Total Projects" value={projects.length} />
 
           <Card
             title="Active Projects"
-            value={projects.filter((p) => p.status === "ACTIVE").length}
+            value={projects.filter((p: any) => p.status === "ACTIVE").length}
           />
 
           <Card
             title="Completed Projects"
-            value={projects.filter((p) => p.status === "COMPLETED").length}
+            value={projects.filter((p: any) => p.status === "COMPLETED").length}
           />
         </div>
       </div>
@@ -47,14 +58,22 @@ gap-5
   );
 }
 
-function Card({ title, value }: { title: string; value: number }) {
+function Card({
+  title,
+
+  value,
+}: {
+  title: string;
+
+  value: number;
+}) {
   return (
     <div
       className="
 bg-white
-p-6
 rounded
 shadow
+p-6
 "
     >
       <h2>{title}</h2>
