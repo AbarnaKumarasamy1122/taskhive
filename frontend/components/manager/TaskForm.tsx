@@ -21,9 +21,14 @@ export default function TaskForm({
 
   const [form, setForm] = useState({
     title: "",
+
     description: "",
+
     priority: "MEDIUM",
+
     assignedTo: "",
+
+    deadline: "",
   });
 
   const submit = () => {
@@ -49,6 +54,7 @@ export default function TaskForm({
             description: "",
             priority: "MEDIUM",
             assignedTo: "",
+            deadline: "",
           });
         },
 
@@ -159,6 +165,24 @@ w-full
           </option>
         ))}
       </select>
+
+      <input
+        type="date"
+        className="
+border
+p-2
+rounded
+w-full
+"
+        placeholder="Deadline"
+        value={form.deadline}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            deadline: e.target.value,
+          })
+        }
+      />
 
       <button
         disabled={create.isPending}

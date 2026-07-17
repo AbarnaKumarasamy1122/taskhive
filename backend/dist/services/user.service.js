@@ -3,17 +3,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignRole = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUsers = void 0;
+exports.assignRole = exports.deleteUser = exports.updateUser = exports.createUser = exports.getTeamMembers = exports.getUsers = void 0;
 const prisma_1 = __importDefault(require("../config/prisma"));
 const password_1 = require("../utils/password");
 const getUsers = async () => {
-    return await prisma_1.default.user.findMany({
+    return prisma_1.default.user.findMany({
         include: {
             role: true,
         },
     });
 };
 exports.getUsers = getUsers;
+const getTeamMembers = async () => {
+    return prisma_1.default.user.findMany({
+        where: {
+            role: {
+                name: "TEAM_MEMBER",
+            },
+        },
+        include: {
+            role: true,
+        },
+    });
+};
+exports.getTeamMembers = getTeamMembers;
 const createUser = async (data) => {
     const { name, email, password, role } = data;
     const roleData = await prisma_1.default.role.findUnique({
@@ -24,7 +37,7 @@ const createUser = async (data) => {
     if (!roleData)
         throw new Error("Role not found");
     const hashedPassword = await (0, password_1.hashPassword)(password);
-    return await prisma_1.default.user.create({
+    return prisma_1.default.user.create({
         data: {
             name,
             email,
@@ -38,7 +51,7 @@ const createUser = async (data) => {
 };
 exports.createUser = createUser;
 const updateUser = async (id, data) => {
-    return await prisma_1.default.user.update({
+    return prisma_1.default.user.update({
         where: {
             id,
         },
@@ -47,7 +60,7 @@ const updateUser = async (id, data) => {
 };
 exports.updateUser = updateUser;
 const deleteUser = async (id) => {
-    return await prisma_1.default.user.delete({
+    return prisma_1.default.user.delete({
         where: {
             id,
         },
@@ -62,7 +75,7 @@ const assignRole = async (id, roleName) => {
     });
     if (!role)
         throw new Error("Role not found");
-    return await prisma_1.default.user.update({
+    return prisma_1.default.user.update({
         where: {
             id,
         },

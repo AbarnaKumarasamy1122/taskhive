@@ -1,45 +1,45 @@
 import api from "./api";
 
-// Get all tasks
+// Get tasks
 
 export const getTasks = async () => {
-  const response = await api.get("/tasks");
+  const res = await api.get("/tasks");
 
-  return response.data;
+  return res.data.data ?? [];
 };
 
-// Create task
+// Create
 
 export const createTask = async (data: any) => {
-  const response = await api.post("/tasks", data);
+  const res = await api.post("/tasks", data);
 
-  return response.data;
+  return res.data;
 };
 
-// Update task status
+// Update Status
 
 export const updateTaskStatus = async (id: string, status: string) => {
-  const response = await api.patch(`/tasks/${id}/status`, {
+  const res = await api.patch(`/tasks/${id}/status`, {
     status,
   });
 
-  return response.data;
+  return res.data;
 };
 
-// Delete task
+// Delete
 
 export const deleteTask = async (id: string) => {
-  const response = await api.delete(`/tasks/${id}`);
+  const res = await api.delete(`/tasks/${id}`);
 
-  return response.data;
+  return res.data;
 };
 
-// Add comment
+// Comment
 
-export async function addComment(taskId: string, comment: string) {
-  const response = await api.post(`/tasks/${taskId}/comments`, {
+export const addComment = async (taskId: string, comment: string) => {
+  const res = await api.post(`/tasks/${taskId}/comments`, {
     comment,
   });
 
-  return response.data;
-}
+  return res.data;
+};

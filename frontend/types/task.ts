@@ -1,50 +1,33 @@
-export type TaskStatus = "TODO" | "IN_PROGRESS" | "COMPLETED";
-
-export type TaskPriority = "LOW" | "MEDIUM" | "HIGH";
-
 export interface Task {
   id: string;
 
   title: string;
 
-  description: string;
+  description?: string;
 
-  priority: TaskPriority;
+  priority: "LOW" | "MEDIUM" | "HIGH";
 
-  status: TaskStatus;
+  status: "TODO" | "IN_PROGRESS" | "COMPLETED";
 
   deadline?: string | null;
 
-  projectId: string;
-
-  assignedTo: string;
-
-  createdBy: string;
+  project: {
+    id: string;
+    title: string;
+  };
 
   assignee: {
     id: string;
-
     name: string;
+    email: string;
   };
 
   creator: {
     id: string;
-
     name: string;
   };
 
-  comments: {
-    id: string;
-
-    comment: string;
-
-    user: {
-      id: string;
-      name: string;
-    };
-
-    createdAt: string;
-  }[];
+  comments: any[];
 
   createdAt: string;
 }

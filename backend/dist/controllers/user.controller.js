@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignRole = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUsers = void 0;
+exports.assignRole = exports.deleteUser = exports.updateUser = exports.createUser = exports.getTeamMembers = exports.getUsers = void 0;
 const express_1 = require("express");
 const userService = __importStar(require("../services/user.service"));
 const getUsers = async (req, res) => {
@@ -44,6 +44,14 @@ const getUsers = async (req, res) => {
     });
 };
 exports.getUsers = getUsers;
+const getTeamMembers = async (req, res) => {
+    const users = await userService.getTeamMembers();
+    res.json({
+        success: true,
+        data: users,
+    });
+};
+exports.getTeamMembers = getTeamMembers;
 const createUser = async (req, res) => {
     const user = await userService.createUser(req.body);
     res.status(201).json({

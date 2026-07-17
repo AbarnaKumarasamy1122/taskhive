@@ -54,73 +54,100 @@ export default function ProjectTable() {
 
   return (
     <>
+      {/* Desktop Table */}
+
       <div
         className="
-bg-white
-rounded
-shadow
-overflow-x-auto
-"
+        bg-white
+        rounded
+        shadow
+        overflow-x-auto
+        "
       >
         <table
           className="
-w-full
-"
+          w-full
+          table-fixed
+          "
         >
           <thead>
             <tr
               className="
-border-b
-"
+              border-b
+              bg-gray-50
+              "
             >
               <th
                 className="
-p-4
-text-left
-"
+                w-[25%]
+                p-4
+                text-left
+                "
               >
                 Title
               </th>
 
-              <th>Status</th>
+              <th
+                className="
+                w-[15%]
+                text-center
+                "
+              >
+                Status
+              </th>
 
               <th
                 className="
-hidden
-md:table-cell
-"
+                hidden
+                md:table-cell
+                w-[15%]
+                text-center
+                "
               >
                 Manager
               </th>
 
               <th
                 className="
-hidden
-md:table-cell
-"
+                hidden
+                md:table-cell
+                w-[10%]
+                text-center
+                "
               >
                 Members
               </th>
 
               <th
                 className="
-hidden
-md:table-cell
-"
+                hidden
+                md:table-cell
+                w-[12%]
+                text-center
+                "
               >
                 Start Date
               </th>
 
               <th
                 className="
-hidden
-md:table-cell
-"
+                hidden
+                md:table-cell
+                w-[12%]
+                text-center
+                "
               >
                 End Date
               </th>
 
-              <th>Actions</th>
+              <th
+                className="
+                w-[15%]
+                text-center
+                "
+              >
+                Actions
+              </th>
             </tr>
           </thead>
 
@@ -134,29 +161,34 @@ md:table-cell
                   }
                 }}
                 className="
-border-b
-hover:bg-gray-50
-cursor-pointer
-"
+                border-b
+                hover:bg-gray-50
+                cursor-pointer
+                "
               >
                 <td
                   className="
-p-4
-font-medium
-"
+                  p-4
+                  font-medium
+                  truncate
+                  "
                 >
                   {project.title}
                 </td>
 
-                <td>
+                <td
+                  className="
+                  text-center
+                  "
+                >
                   <span
                     className="
-px-2
-py-1
-rounded
-text-sm
-bg-gray-100
-"
+                    bg-gray-100
+                    px-2
+                    py-1
+                    rounded
+                    text-sm
+                    "
                   >
                     {project.status}
                   </span>
@@ -164,54 +196,65 @@ bg-gray-100
 
                 <td
                   className="
-hidden
-md:table-cell
-"
+                  hidden
+                  md:table-cell
+                  text-center
+                  "
                 >
                   {project.manager?.name ?? "-"}
                 </td>
 
                 <td
                   className="
-hidden
-md:table-cell
-"
+                  hidden
+                  md:table-cell
+                  text-center
+                  "
                 >
                   {project.members?.length ?? 0}
                 </td>
 
                 <td
                   className="
-hidden
-md:table-cell
-"
+                  hidden
+                  md:table-cell
+                  text-center
+                  text-sm
+                  "
                 >
                   {formatDate(project.startDate)}
                 </td>
 
                 <td
                   className="
-hidden
-md:table-cell
-"
+                  hidden
+                  md:table-cell
+                  text-center
+                  text-sm
+                  "
                 >
                   {formatDate(project.endDate)}
                 </td>
 
-                <td>
+                <td
+                  className="
+                  text-center
+                  "
+                >
                   <div
                     className="
-flex
-gap-2
-"
+                    flex
+                    justify-center
+                    gap-2
+                    "
                     onClick={(e) => e.stopPropagation()}
                   >
                     <EditProjectModal project={project} />
 
                     <Button
                       className="
-bg-red-500
-"
+                      bg-red-500
+                      "
                       onClick={() => {
                         setDeleteProject(project);
                       }}
@@ -226,42 +269,43 @@ bg-red-500
         </table>
       </div>
 
-      {/* Mobile Details Modal */}
+      {/* Mobile Detail Popup */}
 
       {selectedProject && (
         <div
           className="
-fixed
-inset-0
-bg-black/50
-flex
-items-center
-justify-center
-z-50
-p-4
-"
+          fixed
+          inset-0
+          bg-black/50
+          flex
+          items-center
+          justify-center
+          z-50
+          p-4
+          "
         >
           <div
             className="
-bg-white
-rounded
-w-full
-max-w-md
-p-6
-space-y-4
-"
+            bg-white
+            rounded
+            max-w-md
+            w-full
+            p-6
+            space-y-4
+            "
           >
             <div
               className="
-flex
-justify-between
-"
+              flex
+              justify-between
+              items-center
+              "
             >
               <h2
                 className="
-text-xl
-font-bold
-"
+                text-xl
+                font-bold
+                "
               >
                 Project Details
               </h2>
@@ -300,11 +344,11 @@ font-bold
                 <p
                   key={member.id}
                   className="
-text-sm
-text-gray-600
-"
+                      text-sm
+                      text-gray-600
+                      "
                 >
-                  {member.user?.name}-{member.user?.email}
+                  {member.user?.name} - {member.user?.email}
                 </p>
               ))}
             </div>
@@ -312,12 +356,12 @@ text-gray-600
             <button
               onClick={() => setSelectedProject(null)}
               className="
-bg-black
-text-white
-w-full
-py-2
-rounded
-"
+              bg-black
+              text-white
+              rounded
+              py-2
+              w-full
+              "
             >
               Close
             </button>
@@ -325,63 +369,60 @@ rounded
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Confirmation Popup */}
 
       {deleteProject && (
         <div
           className="
-fixed
-inset-0
-bg-black/50
-flex
-items-center
-justify-center
-z-50
-"
+          fixed
+          inset-0
+          bg-black/50
+          flex
+          items-center
+          justify-center
+          z-50
+          p-4
+          "
         >
           <div
             className="
-bg-white
-rounded
-p-6
-w-full
-max-w-sm
-space-y-5
-"
+            bg-white
+            rounded
+            p-6
+            max-w-sm
+            w-full
+            space-y-5
+            "
           >
             <h2
               className="
-text-xl
-font-bold
-"
+              text-xl
+              font-bold
+              "
             >
               Delete Project?
             </h2>
 
-            <p
-              className="
-text-gray-600
-"
-            >
+            <p className="text-gray-600">
               Are you sure you want to delete
               <b> {deleteProject.title}</b>?
             </p>
 
             <div
               className="
-flex
-gap-3
-"
+              flex
+              gap-3
+              "
             >
               <button
                 onClick={() => setDeleteProject(null)}
                 className="
-border
-px-4
-py-2
-rounded
-w-full
-"
+                border
+                rounded
+                px-4
+                py-2
+                w-full
+                "
               >
                 Cancel
               </button>
@@ -393,13 +434,13 @@ w-full
                   setDeleteProject(null);
                 }}
                 className="
-bg-red-500
-text-white
-px-4
-py-2
-rounded
-w-full
-"
+                bg-red-500
+                text-white
+                rounded
+                px-4
+                py-2
+                w-full
+                "
               >
                 Delete
               </button>

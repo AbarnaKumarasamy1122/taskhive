@@ -12,6 +12,20 @@ export declare const getUsers: () => Promise<({
     password: string;
     roleId: string;
 })[]>;
+export declare const getTeamMembers: () => Promise<({
+    role: {
+        id: string;
+        name: string;
+        createdAt: Date;
+    };
+} & {
+    id: string;
+    name: string;
+    createdAt: Date;
+    email: string;
+    password: string;
+    roleId: string;
+})[]>;
 export declare const createUser: (data: any) => Promise<{
     role: {
         id: string;

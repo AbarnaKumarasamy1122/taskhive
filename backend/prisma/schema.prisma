@@ -27,30 +27,34 @@ enum TaskStatus {
 }
 
 model Role {
-  id        String   @id @default(uuid())
-  name      String   @unique
+  id   String @id @default(uuid())
+  name String @unique
 
-  users     User[]
+  users User[]
 
   createdAt DateTime @default(now())
 }
 
 model User {
-  id         String   @id @default(uuid())
-  name       String
-  email      String   @unique
-  password   String
+  id String @id @default(uuid())
 
-  roleId     String
-  role       Role @relation(fields: [roleId], references: [id])
+  name String
 
-  projects   Project[] @relation("ManagerProjects")
+  email String @unique
+
+  password String
+
+  roleId String
+
+  role Role @relation(fields: [roleId], references: [id])
+
+  projects Project[] @relation("ManagerProjects")
 
   assignedTasks Task[] @relation("AssignedTasks")
 
   createdTasks Task[] @relation("CreatedTasks")
 
-  comments   Comment[]
+  comments Comment[]
 
   notifications Notification[]
 
@@ -62,21 +66,21 @@ model User {
 }
 
 model Project {
-  id          String @id @default(uuid())
+  id String @id @default(uuid())
 
-  title       String
+  title String
 
-  description String
+  description String?
 
-  status      ProjectStatus @default(PLANNING)
+  status ProjectStatus @default(PLANNING)
 
-  startDate   DateTime?
+  startDate DateTime?
 
-  endDate     DateTime?
+  endDate DateTime?
 
-  managerId   String
+  managerId String
 
-  manager User @relation("ManagerProjects", fields:[managerId], references:[id])
+  manager User @relation("ManagerProjects", fields: [managerId], references: [id])
 
   tasks Task[]
 
@@ -85,27 +89,26 @@ model Project {
   createdAt DateTime @default(now())
 }
 
-model ProjectMember{
+model ProjectMember {
   id String @id @default(uuid())
 
   projectId String
 
   userId String
 
-  project Project @relation(fields:[projectId], references:[id])
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields:[userId], references:[id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([projectId,userId])
+  @@unique([projectId, userId])
 }
 
-model Task{
-
+model Task {
   id String @id @default(uuid())
 
   title String
 
-  description String
+  description String?
 
   priority TaskPriority @default(MEDIUM)
 
@@ -119,19 +122,20 @@ model Task{
 
   createdBy String
 
-  project Project @relation(fields:[projectId], references:[id])
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  assignee User @relation("AssignedTasks", fields:[assignedTo], references:[id])
+  assignee User @relation("AssignedTasks", fields: [assignedTo], references: [id])
 
-  creator User @relation("CreatedTasks", fields:[createdBy], references:[id])
+  creator User @relation("CreatedTasks", fields: [createdBy], references: [id])
 
   comments Comment[]
 
   createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
 }
 
-model Comment{
-
+model Comment {
   id String @id @default(uuid())
 
   comment String
@@ -140,15 +144,14 @@ model Comment{
 
   userId String
 
-  task Task @relation(fields:[taskId], references:[id])
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields:[userId], references:[id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
 
-model Notification{
-
+model Notification {
   id String @id @default(uuid())
 
   message String
@@ -157,20 +160,19 @@ model Notification{
 
   userId String
 
-  user User @relation(fields:[userId], references:[id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
 
-model ActivityLog{
-
+model ActivityLog {
   id String @id @default(uuid())
 
   action String
 
   userId String
 
-  user User @relation(fields:[userId], references:[id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
